@@ -3,7 +3,7 @@ import React from "react";
 function Loading() {
   return (
     <div className=" backdrop-blur-sm w-full h-screen flex justify-center items-center absolute">
-      <div role="status" >
+      <div role="status">
         <svg
           aria-hidden="true"
           class="inline w-12 h-12 mr-2 text-g animate-spin dark:text-white fill-gray-600 dark:fill-gray-800"

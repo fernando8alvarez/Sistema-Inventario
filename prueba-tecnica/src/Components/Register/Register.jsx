@@ -17,9 +17,11 @@ const estilos = {
 };
 
 function Register() {
+  //MANEJO DE HOOKS
   const history = useNavigate();
   const dispatch = useDispatch();
 
+  //ESTADOS GLOBALES
   const { message } = useSelector((state) => state);
   const { loading } = useSelector((state) => state);
 
@@ -67,7 +69,7 @@ function Register() {
     if (!input.password) {
       errors.password = "Se requiere una contraseña";
     } else if (!/^[0-9a-zA-Z]+$/g.test(input.password)) {
-      errors.usuario = "Solo puede contener numeros y letras";
+      errors.password = "Solo puede contener numeros y letras";
     }
 
     return errors;
@@ -81,6 +83,16 @@ function Register() {
 
     if (nombre && apellido && usuario && email && password) {
       dispatch(registerUser(dataUser));
+    } else {
+      //MODAL 1: Los campos requeridos estan vacios
+      Swal.fire({
+        title: "ERROR!!!",
+        text: "No se han completado los campos requeridos.",
+        icon: "error",
+        confirmButtonColor: "rgb(0 0 0)",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+      });
     }
   };
 
@@ -97,7 +109,7 @@ function Register() {
           email: "",
           password: "",
         });
-        //MODAL 1: EL usuario ya se encuentra en uso
+        //MODAL 2: EL usuario ya se encuentra en uso
         Swal.fire({
           title: "Alerta!",
           text: status,
@@ -116,7 +128,7 @@ function Register() {
           email: "",
           password: "",
         });
-        //MODAL 2: Operación fué realizada exitosamente
+        //MODAL 3: Operación fué realizada exitosamente
         Swal.fire({
           title: "Registro satisfactorio!",
           text: status,
@@ -135,7 +147,7 @@ function Register() {
           email: "",
           password: "",
         });
-        //MODAL 3: Error inesperado
+        //MODAL 4: Error inesperado
         Swal.fire({
           title: "Error!",
           text: status,
@@ -262,12 +274,13 @@ function Register() {
               </div>
             </div>
           </div>
-
           <div className="flex flex-col  w-full">
+            {/*----- REDIRECCION A INICIO DE SESION -----*/}
             <button onClick={() => history("/login")} className={estilos.link}>
               ¿Ya tienes una cuenta? click aqui para iniciar sesión
             </button>
             <div className="container flex justify-center gap-5">
+              {/*----- BOTON REGISTRARSE-----*/}
               <button
                 type="submit"
                 onClick={(e) => handleSubmit(e)}
@@ -275,6 +288,7 @@ function Register() {
               >
                 Registrarse
               </button>
+              {/*----- BOTON REGRESAR A HOME -----*/}
               <button onClick={() => history("/")} className={estilos.boton}>
                 Regresar
               </button>
