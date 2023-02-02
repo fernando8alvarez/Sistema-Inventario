@@ -15,11 +15,11 @@ function Login() {
     <>
       <div className={estilos.contenedor1}>
         <div className="text-white text-5xl font-medium">INICIAR SESIÓN</div>
-        <form action="#" class="w-3/12">
+        <form action="#" className="w-3/12">
           <div className="flex flex-col justify-between">
             <div className={estilos.contenedor2}>
               <div className="flex flex-col">
-                <label for="usuario" class={estilos.titulos}>
+                <label for="usuario" className={estilos.titulos}>
                   Usuario:
                 </label>
                 <input
@@ -27,7 +27,7 @@ function Login() {
                   id="usuario"
                   name="usuario"
                   onChange={""}
-                  class={estilos.input}
+                  className={estilos.input}
                   placeholder="Ingrese su usuario o correo ..."
                   value={""}
                 />
@@ -35,16 +35,16 @@ function Login() {
             </div>
             <div className={estilos.contenedor2}>
               <div className="flex flex-col">
-                <label for="password" class={estilos.titulos}>
+                <label for="password" className={estilos.titulos}>
                   Contraseña:
                 </label>
                 <input
                   type="text"
                   id="password"
                   name="password"
-                  class={estilos.input}
+                  className={estilos.input}
                   onChange={"(e) => handleChange(e)"}
-                  placeholder="Ingrese su contraseña..."
+                  placeholder="Ingrese su contraseña ..."
                   value={""}
                 />
               </div>
@@ -53,8 +53,8 @@ function Login() {
 
           <div className="flex flex-col  w-full">
             <button
-              onClick={() => history("/")}
-              class="text-base font-semibold text-white hover:text-[#bfff07]"
+              onClick={() => history("/register")}
+              className="text-base font-semibold text-white hover:text-[#bfff07]"
             >
               ¿No tiene una cuenta? click aqui para registrarse
             </button>
