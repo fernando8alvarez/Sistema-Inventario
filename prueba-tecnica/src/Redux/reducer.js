@@ -4,6 +4,7 @@ import {
   LOADING,
   AUTHENTICATION,
   PRODUCT_LIST,
+  CREATE_PRODUCT,
 } from "../Redux/actions";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   loading: false,
   isAuthenticated: false,
   productList: [],
+  newProduct:[]
 };
 
 export default function Reducer(state = initialState, action) {
@@ -42,6 +44,12 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         productList: action.payload,
+        loading: false,
+      };
+    case CREATE_PRODUCT:
+      return {
+        ...state,
+        newProduct: action.payload,
         loading: false,
       };
 

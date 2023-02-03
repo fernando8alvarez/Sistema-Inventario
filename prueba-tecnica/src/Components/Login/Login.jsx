@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, authentication, productList } from "../../Redux/actions";
+import { loginUser, authentication, products } from "../../Redux/actions";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
 
@@ -118,7 +118,7 @@ function Login() {
           allowEscapeKey: false,
         }).then(function () {
           dispatch(authentication(true));
-          dispatch(productList(user[0].token));
+          dispatch(products(user[0].token));
           history("/profile");
         });
       } else if (user[0].code === 1100 && dataUser.usuario) {

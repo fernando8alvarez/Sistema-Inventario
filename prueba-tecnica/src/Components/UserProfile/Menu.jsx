@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import imgUser from "./img/defaultUser.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { authentication } from "../../Redux/actions";
+import { authentication, products } from "../../Redux/actions";
 
 //ESTILOS CON TAILWIND
 const estilos = {
-  contenedor1:"bg-white w-60 h-full mt-4 py-5 px-4 rounded-r-lg shadow-black shadow-lg flex flex-col gap-5",
-  botones:"text-sm font-medium w-full text-gray-700 py-2 px-2 flex gap-2 items-center justify-start hover:bg-black hover:text-white hover:scale-105 rounded-md transition-all duration-300 delay-150 ease-in-out",
+  contenedor1:
+    "bg-white w-60 h-fit mt-4 py-5 px-4 rounded-r-lg shadow-black shadow-lg flex flex-col gap-5",
+  botones:
+    "text-sm font-medium w-full text-gray-700 py-2 px-2 flex gap-2 items-center justify-start hover:bg-black hover:text-white hover:scale-105 rounded-md transition-all duration-300 delay-150 ease-in-out",
 };
 
-const Menu = () => {
+const Menu = ({
+  productList,
+  setProductList,
+  createProducts,
+  setCreateProducts,
+}) => {
   //MANEJO DE HOOKS
   const history = useNavigate();
   const dispatch = useDispatch();
@@ -23,6 +30,17 @@ const Menu = () => {
   const singOut = () => {
     dispatch(authentication(false));
     history("/");
+  };
+
+  const buttonProductList = () => {
+    setProductList(!productList && true);
+    dispatch(products(user[0].token));
+    setCreateProducts(false);
+  };
+
+  const buttonCreateProduct = () => {
+    setCreateProducts(!createProducts && true);
+    setProductList(false);
   };
 
   return (
@@ -48,11 +66,14 @@ const Menu = () => {
       {/*----- OPCIONES DEL MENU -----*/}
       <div>
         {/*----- PESTAÑA LISTAR PRODUCTOS -----*/}
-        <button onClick={""} className={estilos.botones}>
+        <button onClick={() => buttonProductList()} className={estilos.botones}>
           <span className="">Lista de productos</span>
         </button>
         {/*----- PESTAÑA CREAR PRODUCTO -----*/}
-        <button onClick={""} className={estilos.botones}>
+        <button
+          onClick={() => buttonCreateProduct()}
+          className={estilos.botones}
+        >
           <span className="">Crear productos</span>
         </button>
         {/*----- PESTAÑA CERRAR SESION -----*/}

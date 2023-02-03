@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../Redux/actions";
+import { registerUser, loginUser, authentication } from "../../Redux/actions";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
 
 //ESTILOS CON TAILWIND
 const estilos = {
-  input: "border-4 border-gray-300 pl-3 py-2 shadow-sm bg-transparent rounded text-lg focus:outline-none focus:border-[#bfff07] placeholder-gray-500 text-white",
-  contenedor1: "flex flex-col items-center gap-10 justify-center w-full h-screen bg-[#0b0b0b]",
+  input:
+    "border-4 border-gray-300 pl-3 py-2 shadow-sm bg-transparent rounded text-lg focus:outline-none focus:border-[#bfff07] placeholder-gray-500 text-white",
+  contenedor1:
+    "flex flex-col items-center gap-10 justify-center w-full h-screen bg-[#0b0b0b]",
   contenedor2: "w-full flex flex-col mb-6",
   titulos: "text-xl leading-8 font-semibold text-white pb-2",
-  boton: "text-white bg-black hover:bg-gray-800 focus:outline-none shadow-md shadow-black rounded-full text-center font-semibold text-lg px-5 py-3  w-auto mt-10",
+  boton:
+    "text-white bg-black hover:bg-gray-800 focus:outline-none shadow-md shadow-black rounded-full text-center font-semibold text-lg px-5 py-3  w-auto mt-10",
   link: "text-base font-semibold text-white hover:text-[#bfff07]",
   error: "text-red-500 text-sm mt-2 w-fit",
 };
@@ -34,8 +37,16 @@ function Register() {
     password: "",
   });
 
+  const [startUser, setStartUser] = useState({
+    usuario: "",
+    password: "",
+  });
+
   //MANEJO DE INPUTS CON LA INFORMACION DEL USUARIO
   const handleChange = (e) => {
+    if (e.target.name === "usuario" || e.target.name === "password") {
+      setStartUser({ ...startUser, [e.target.name]: e.target.value });
+    }
     setDataUser({ ...dataUser, [e.target.name]: e.target.value });
     setErrors(validate({ ...dataUser, [e.target.name]: e.target.value }));
   };
@@ -121,6 +132,8 @@ function Register() {
           history("/login");
         });
       } else if (message[0].code === 1000 && dataUser.nombre) {
+        dispatch(loginUser(startUser));
+        dispatch(authentication(true));
         setDataUser({
           nombre: "",
           apellido: "",
@@ -137,7 +150,7 @@ function Register() {
           allowOutsideClick: false,
           allowEscapeKey: false,
         }).then(function () {
-          //history("/login")
+          history("/profile");
         });
       } else if (message[0].code === 1100 && dataUser.nombre) {
         setDataUser({
@@ -156,7 +169,7 @@ function Register() {
           allowOutsideClick: false,
           allowEscapeKey: false,
         }).then(function () {
-          history("/");
+          history("/profile");
         });
       }
     }

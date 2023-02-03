@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { products } from "../../Redux/actions";
 
 //ESTILOS TAILWIND
 const estilos = {
@@ -9,12 +10,12 @@ const estilos = {
 const ProductList = () => {
   //ESTADOS GLOBALES
   const { productList } = useSelector((state) => state);
-  const { data } = productList.data;
 
   const columName = [
     "Id",
     "Codigo",
     "Descripcion",
+    "Id_Categoria",
     "Categoria",
     "Detalles",
     "Stock",
@@ -36,17 +37,32 @@ const ProductList = () => {
           </thead>
           {/*----- INFORMACION DE COLUMNAS (PRODUCTOS) -----*/}
           <tbody>
-            {data &&
-              data.map((e) => {
+            {productList.data.data &&
+              productList.data.data.map((e) => {
                 return (
                   <tr>
-                    <td className={estilos.tabla}>{e.id}</td>
-                    <td className={estilos.tabla}>{e.codigo}</td>
-                    <td className={estilos.tabla}>{e.descripcion}</td>
-                    <td className={estilos.tabla}>{e.productos_categorias[0].categoria.descripcion}</td>
-                    <td className={estilos.tabla}>{e.detalle_productos[0].descripcion}</td>
-                    <td className={estilos.tabla}>{e.detalle_productos[0].stock}</td>
-                    <td className={estilos.tabla}>{e.detalle_productos[0].precio}</td>
+                    <td className={estilos.tabla}>{e.id && e.id}</td>
+                    <td className={estilos.tabla}>{e.codigo && e.codigo}</td>
+                    <td className={estilos.tabla}>
+                      {e.descripcion && e.descripcion}
+                    </td>
+                    <td className={estilos.tabla}>
+                      {e.productos_categorias[0] &&
+                        e.productos_categorias[0].categoria_id}
+                    </td>
+                    <td className={estilos.tabla}>
+                      {e.productos_categorias[0] &&
+                        e.productos_categorias[0].categoria.descripcion}
+                    </td>
+                    <td className={estilos.tabla}>
+                      {e.detalle_productos[0].descripcion}
+                    </td>
+                    <td className={estilos.tabla}>
+                      {e.detalle_productos[0].stock}
+                    </td>
+                    <td className={estilos.tabla}>
+                      {e.detalle_productos[0].precio}
+                    </td>
                   </tr>
                 );
               })}

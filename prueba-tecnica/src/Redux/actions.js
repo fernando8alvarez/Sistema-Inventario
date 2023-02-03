@@ -6,6 +6,7 @@ export const LOGIN_USER = "LOGIN_USER";
 export const LOADING = "LOADING";
 export const AUTHENTICATION = "AUTHENTICATION";
 export const PRODUCT_LIST = "PRODUCT_LIST";
+export const CREATE_PRODUCT = "CREATE_PRODUCT";
 
 //REGISTRAR USUARIO
 export function registerUser(data) {
@@ -48,7 +49,7 @@ export function authentication(payload) {
 }
 
 //LISTADO DE PRODUCTOS
-export function productList(data) {
+export function products(data) {
   return async function (dispatch) {
     dispatch({ type: LOADING });
     try {
@@ -65,7 +66,6 @@ export function productList(data) {
         const { code, message } = products.data;
 
         if (code === 1000) {
-          console.log(message);
           return dispatch({ type: PRODUCT_LIST, payload: products });
         } else if (code === 1100) {
           Swal.fire({
@@ -77,6 +77,54 @@ export function productList(data) {
             allowEscapeKey: false,
           }).then(function () {
             history("/");
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Error!",
+        text: "Token invalido",
+        icon: "error",
+        confirmButtonColor: "rgb(0 0 0)",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+      }).then(function () {
+        window.location.href = window.location.origin;
+      });
+    }
+  };
+}
+
+//CREAR UN NUEVO PROPUDCTO
+export function createdProduct(dataProduct, token) {
+  return async function (dispatch) {
+    dispatch({ type: LOADING });
+    try {
+      const newProduct = await axios.post(
+        "https://api-test-v2.onrender.com/producto/create",
+        dataProduct,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      if (newProduct) {
+        const { code, message } = newProduct.data;
+
+        if (code === 1000) {
+          console.log(message);
+          return dispatch({ type: CREATE_PRODUCT, payload: newProduct });
+        } else if (code === 1005 || code === 1100) {
+          Swal.fire({
+            title: "Error!",
+            text: message,
+            icon: "error",
+            confirmButtonColor: "rgb(0 0 0)",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
           });
         }
       }
