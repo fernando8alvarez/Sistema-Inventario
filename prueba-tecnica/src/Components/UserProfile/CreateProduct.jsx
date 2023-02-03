@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createdProduct } from "../../Redux/actions";
 import Swal from "sweetalert2";
@@ -31,7 +31,8 @@ const CreateProduct = () => {
     detalle_producto: [{ descripcion: "", stock: 0, precio: 0 }],
   });
 
-  //MANEJO DE INPUTS DE LA INFORMACION DEL PRODUCTO
+
+  //MANEJO DE INPUTS DE LA INFORMACION DEL PRODUCTO Y ERRORES
   const handleChange = (e) => {
     if (e.target.name === "categoria") {
       setDataProduct({
@@ -48,6 +49,17 @@ const CreateProduct = () => {
           },
         ],
       });
+      setErrors(
+        validate({
+          ...dataProduct,
+          ["detalle_producto"]: [
+            {
+              ...dataProduct.detalle_producto[0],
+              [e.target.name]: parseInt(e.target.value),
+            },
+          ],
+        })
+      );
     } else if (e.target.name === "detalle") {
       setDataProduct({
         ...dataProduct,
@@ -60,9 +72,33 @@ const CreateProduct = () => {
       });
     } else {
       setDataProduct({ ...dataProduct, [e.target.name]: e.target.value });
+      setErrors(validate({ ...dataProduct, [e.target.name]: e.target.value }));
     }
-    //setErrors(validate({ ...dataUser, [e.target.name]: e.target.value }));
   };
+
+  //VALIDACIONES DE LOS INPUTS
+  const [errors, setErrors] = useState({});
+
+  function validate(input) {
+    let errors = {};
+
+    if (!input.codigo) {
+      errors.codigo = "Se requiere un codigo numerico";
+    } else if (!/^[0-9]*$/g.test(input.codigo)) {
+      errors.codigo = "Solo puede contener numero";
+    }
+    if (!input.categoria[0].categoria_id) {
+      errors.categoria = "Se requiere un numero entero";
+    }
+    if (!input.detalle_producto[0].stock) {
+      errors.stock = "Se requiere un numero entero";
+    }
+    if (!input.detalle_producto[0].precio) {
+      errors.precio = "Se requiere un numero entero o decimal";
+    }
+
+    return errors;
+  }
 
   //ENVIO DE FORMULARIO
   const handleSubmit = (e) => {
@@ -74,13 +110,13 @@ const CreateProduct = () => {
     const { token } = user[0];
 
     if (token && codigo && descripcion && categoria_id && stock && precio) {
+      dispatch(createdProduct(dataProduct, token));
       setDataProduct({
         codigo: "",
         descripcion: "",
-        categoria: [{ categoria_id: 0 }],
-        detalle_producto: [{ descripcion: "", stock: 0, precio: 0 }],
+        categoria: [{ categoria_id: "" }],
+        detalle_producto: [{ descripcion: "", stock: "", precio: "" }],
       });
-      dispatch(createdProduct(dataProduct, token));
     } else {
       //MODAL 1: Los campos requeridos estan vacios
       Swal.fire({
@@ -93,8 +129,6 @@ const CreateProduct = () => {
       });
     }
   };
-
-  console.log(message2);
 
   return (
     <div className="w-full h-fit flex flex-col items-center gap-10">
@@ -115,9 +149,9 @@ const CreateProduct = () => {
                 className={estilos.input}
                 placeholder="Ingrese el codigo del producto ..."
               />
-              {/* {errors.codigo && (
-                  <p className={estilos.error}>{errors.codigo}</p>
-                )} */}
+              {errors.codigo && (
+                <p className={estilos.error}>{errors.codigo}</p>
+              )}
             </div>
           </div>
           {/*----- INPUT DESCRIPCION -----*/}
@@ -134,9 +168,6 @@ const CreateProduct = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese una descripción ..."
               />
-              {/* {errors.descripcion && (
-                  <p className={estilos.error}>{errors.descripcion}</p>
-                )} */}
             </div>
           </div>
         </div>
@@ -155,9 +186,9 @@ const CreateProduct = () => {
                 className={estilos.input}
                 placeholder="Ingrese el id de la categoria ..."
               />
-              {/* {errors.categoria && (
-                  <p className={estilos.error}>{errors.categoria}</p>
-                )} */}
+              {errors.categoria && (
+                <p className={estilos.error}>{errors.categoria}</p>
+              )}
             </div>
           </div>
           {/*----- INPUT DETALLE DEL PRODUCTO -----*/}
@@ -174,9 +205,6 @@ const CreateProduct = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese una descripción ..."
               />
-              {/* {errors.descripcion && (
-                  <p className={estilos.error}>{errors.detalle}</p>
-                )} */}
             </div>
           </div>
         </div>
@@ -195,9 +223,7 @@ const CreateProduct = () => {
                 className={estilos.input}
                 placeholder="Ingrese la cantidad en existencia ..."
               />
-              {/* {errors.stock && (
-                  <p className={estilos.error}>{errors.stock}</p>
-                )} */}
+              {errors.stock && <p className={estilos.error}>{errors.stock}</p>}
             </div>
           </div>
           {/*----- INPUT PRECIO DEL PRODUCTO -----*/}
@@ -214,9 +240,9 @@ const CreateProduct = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese un precio para el producto ..."
               />
-              {/* {errors.precio && (
-                  <p className={estilos.error}>{errors.precio}</p>
-                )} */}
+              {errors.precio && (
+                <p className={estilos.error}>{errors.precio}</p>
+              )}
             </div>
           </div>
         </div>

@@ -5,7 +5,6 @@ import ProductList from "./ProductList";
 import Loading from "../Loading/Loading";
 import CreateProduct from "./CreateProduct";
 
-
 import Swal from "sweetalert2";
 import Menu from "./Menu";
 
@@ -35,11 +34,17 @@ const Profile = () => {
       }).then(function () {
         history("/login");
       });
-    } 
+    }
   }, []);
 
-  return  (
-    <div className={buttonProductList ? "bg-[#0b0b0b] w-full h-full flex " : "bg-[#0b0b0b] w-full h-screen flex "}>
+  return (
+    <div
+      className={
+        buttonProductList
+          ? "bg-[#0b0b0b] w-full h-full flex "
+          : "bg-[#0b0b0b] w-full h-screen flex "
+      }
+    >
       {loading && <Loading />}
       <div className=" w-full h-fit flex pb-7">
         <div className="flex gap-5 pr-8 h-full">

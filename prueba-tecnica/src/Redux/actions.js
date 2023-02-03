@@ -81,7 +81,6 @@ export function products(data) {
         }
       }
     } catch (error) {
-      console.log(error);
       Swal.fire({
         title: "Error!",
         text: "Token invalido",
@@ -115,7 +114,6 @@ export function createdProduct(dataProduct, token) {
         const { code, message } = newProduct.data;
 
         if (code === 1000) {
-          console.log(message);
           //MODAL 1: Producto registrado correctamente
           Swal.fire({
             title: "Producto agregado correctamente!",
@@ -140,7 +138,6 @@ export function createdProduct(dataProduct, token) {
         }
       }
     } catch (error) {
-      console.log(error);
       Swal.fire({
         title: "Error!",
         text: "Token invalido",
