@@ -116,6 +116,16 @@ export function createdProduct(dataProduct, token) {
 
         if (code === 1000) {
           console.log(message);
+          //MODAL 1: Producto registrado correctamente
+          Swal.fire({
+            title: "Producto agregado correctamente!",
+            text: message,
+            icon: "success",
+            confirmButtonColor: "rgb(0 0 0)",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          });
+
           return dispatch({ type: CREATE_PRODUCT, payload: newProduct });
         } else if (code === 1005 || code === 1100) {
           Swal.fire({
@@ -126,6 +136,7 @@ export function createdProduct(dataProduct, token) {
             allowOutsideClick: false,
             allowEscapeKey: false,
           });
+          return dispatch({ type: CREATE_PRODUCT, payload: newProduct });
         }
       }
     } catch (error) {

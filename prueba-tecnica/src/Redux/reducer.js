@@ -13,7 +13,7 @@ const initialState = {
   loading: false,
   isAuthenticated: false,
   productList: [],
-  newProduct:[]
+  message2:[]
 };
 
 export default function Reducer(state = initialState, action) {
@@ -49,7 +49,7 @@ export default function Reducer(state = initialState, action) {
     case CREATE_PRODUCT:
       return {
         ...state,
-        newProduct: action.payload,
+        message2: [action.payload],
         loading: false,
       };
 

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { createdProduct } from "../../Redux/actions";
 import Swal from "sweetalert2";
 
@@ -22,7 +21,7 @@ const CreateProduct = () => {
   const dispatch = useDispatch();
 
   //ESTADOS GLOBALES
-  const { user } = useSelector((state) => state);
+  const { user, message2 } = useSelector((state) => state);
 
   //ESTADO LOCAL CON LOS DATOS DEL PRODUCTO
   const [dataProduct, setDataProduct] = useState({
@@ -65,9 +64,6 @@ const CreateProduct = () => {
     //setErrors(validate({ ...dataUser, [e.target.name]: e.target.value }));
   };
 
-  console.log(dataProduct);
-  console.log(user);
-
   //ENVIO DE FORMULARIO
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,13 +74,13 @@ const CreateProduct = () => {
     const { token } = user[0];
 
     if (token && codigo && descripcion && categoria_id && stock && precio) {
-      dispatch(createdProduct(dataProduct, token));
       setDataProduct({
         codigo: "",
         descripcion: "",
         categoria: [{ categoria_id: 0 }],
         detalle_producto: [{ descripcion: "", stock: 0, precio: 0 }],
       });
+      dispatch(createdProduct(dataProduct, token));
     } else {
       //MODAL 1: Los campos requeridos estan vacios
       Swal.fire({
@@ -97,6 +93,8 @@ const CreateProduct = () => {
       });
     }
   };
+
+  console.log(message2);
 
   return (
     <div className="w-full h-fit flex flex-col items-center gap-10">
