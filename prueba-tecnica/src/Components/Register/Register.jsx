@@ -5,7 +5,7 @@ import { registerUser } from "../../Redux/actions";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
 
-//ETILOS CON TAILWIND
+//ESTILOS CON TAILWIND
 const estilos = {
   input: "border-4 border-gray-300 pl-3 py-2 shadow-sm bg-transparent rounded text-lg focus:outline-none focus:border-[#bfff07] placeholder-gray-500 text-white",
   contenedor1: "flex flex-col items-center gap-10 justify-center w-full h-screen bg-[#0b0b0b]",

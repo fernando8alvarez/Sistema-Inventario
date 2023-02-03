@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../Redux/actions";
+import { loginUser, authentication, productList } from "../../Redux/actions";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
 
+//ESTILOS CON TAILWIND
 const estilos = {
   input: "border-4 border-gray-300 pl-3 py-2 shadow-sm bg-transparent rounded text-lg focus:outline-none focus:border-[#bfff07] placeholder-gray-500 text-white",
   contenedor1:"flex flex-col items-center gap-10 justify-center w-full h-screen bg-[#0b0b0b]",
@@ -107,7 +108,7 @@ function Login() {
           usuario: "",
           password: "",
         });
-        //MODAL 3: Inisio de sesion exitoso
+        //MODAL 3: Inicio de sesion exitoso
         Swal.fire({
           title: "Inicio de sesion satisfactorio!",
           text: status,
@@ -116,7 +117,9 @@ function Login() {
           allowOutsideClick: false,
           allowEscapeKey: false,
         }).then(function () {
-          //history("/login")
+          dispatch(authentication(true));
+          dispatch(productList(user[0].token));
+          history("/profile");
         });
       } else if (user[0].code === 1100 && dataUser.usuario) {
         setUser({
@@ -136,8 +139,7 @@ function Login() {
         });
       }
     }
-  }, [user]);
-  console.log(dataUser);
+  }, [user,dispatch]);
 
   return (
     <>
