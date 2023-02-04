@@ -3,6 +3,7 @@ import imgUser from "./img/defaultUser.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { authentication, products } from "../../Redux/actions";
+import Swal from "sweetalert2";
 
 //ESTILOS CON TAILWIND
 const estilos = {
@@ -28,8 +29,16 @@ const Menu = ({
 
   //AUTENTICACION DE SESION
   const singOut = () => {
-    dispatch(authentication(false));
-    history("/");
+    Swal.fire({
+      title: "Cierre de sesion satisfactorio!",
+      icon: "success",
+      confirmButtonColor: "rgb(0 0 0)",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(function () {
+      dispatch(authentication(false));
+      history("/");
+    });
   };
 
   const buttonProductList = () => {
