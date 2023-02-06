@@ -15,12 +15,12 @@ function Home() {
       <div className={estilos.constenedor}>
         <div className="flex flex-col w-full items-center">
           <div className="text-white text-6xl lg:text-8xl font-medium mr-52 border-b-8 border-black">
-            BIENVENIDO Al
+            SISTEMA DE
           </div>
           <div className="text-white text-6xl lg:text-8xl font-medium ml-60 border-b-8 border-black">
-            TEST TÉCNICO
+            INVENTARIO
           </div>
-          <div className="text-white text-md italic lg:text-lg font-base ml-60">
+          <div className="text-[#bfff07] text-md italic lg:text-lg font-base ml-60">
           © Coded by Luis Fernando Alvarez
           </div>
         </div>

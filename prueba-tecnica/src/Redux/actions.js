@@ -7,6 +7,10 @@ export const LOADING = "LOADING";
 export const AUTHENTICATION = "AUTHENTICATION";
 export const PRODUCT_LIST = "PRODUCT_LIST";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
+export const CHECK_USER = "CHECK_USER";
+export const SAVE_USER = "SAVE_USER";
+export const EDIT_PRODUCT = "EDIT_PRODUCT";
+export const MODIFY_PRODUCT = "MODIFY_PRODUCT"
 
 //REGISTRAR USUARIO
 export function registerUser(data) {
@@ -34,6 +38,27 @@ export function loginUser(data) {
         data
       );
       return dispatch({ type: LOGIN_USER, payload: newUser.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+//CONFIRMAR USUARIO
+export function checkUser(data) {
+  return async function (dispatch) {
+    dispatch({ type: LOADING });
+    dispatch({ type: AUTHENTICATION, payload: true });
+    try {
+      const confirmUser = await axios.get(
+        "https://api-test-v2.onrender.com/user/index",
+        {
+          headers: {
+            token: data,
+          },
+        }
+      );
+      return dispatch({ type: CHECK_USER, payload: confirmUser.data });
     } catch (error) {
       console.log(error);
     }
@@ -122,6 +147,8 @@ export function createdProduct(dataProduct, token) {
             confirmButtonColor: "rgb(0 0 0)",
             allowOutsideClick: false,
             allowEscapeKey: false,
+          }).then(function () {
+            window.location.href = `${window.location.origin}/profile`;
           });
 
           return dispatch({ type: CREATE_PRODUCT, payload: newProduct });
@@ -135,6 +162,80 @@ export function createdProduct(dataProduct, token) {
             allowEscapeKey: false,
           });
           return dispatch({ type: CREATE_PRODUCT, payload: newProduct });
+        }
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Token invalido",
+        icon: "error",
+        confirmButtonColor: "rgb(0 0 0)",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+      }).then(function () {
+        window.location.href = window.location.origin;
+      });
+    }
+  };
+}
+
+//GUARDAR DATOS DE USUARIO
+export function SaveUser(payload) {
+  return {
+    type: SAVE_USER,
+    payload,
+  };
+}
+
+//DETALLES DE PRODUCO A EDITAR
+export function productToEdit(payload) {
+  return {
+    type: EDIT_PRODUCT,
+    payload,
+  };
+}
+
+
+//MODIFICAR UN PRODUCTO
+export function modifyProduct(dataProduct, token) {
+  return async function (dispatch) {
+    dispatch({ type: LOADING });
+    try {
+      const editedProduct = await axios.post(
+        "https://api-test-v2.onrender.com/producto/edit",
+        dataProduct,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      if (editedProduct) {
+        const { code, message } = editedProduct.data;
+
+        if (code === 1000) {
+          //MODAL 1: Producto editado correctamente
+          Swal.fire({
+            title: "Producto editado correctamente!",
+            text: message,
+            icon: "success",
+            confirmButtonColor: "rgb(0 0 0)",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(function () {
+            dispatch({ type: MODIFY_PRODUCT, payload: false });
+          });
+
+        } else if (code === 1004 || code === 1100) {
+          Swal.fire({
+            title: "Error!",
+            text: message,
+            icon: "error",
+            confirmButtonColor: "rgb(0 0 0)",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          });
         }
       }
     } catch (error) {

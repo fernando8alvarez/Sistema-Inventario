@@ -25,8 +25,7 @@ function Register() {
   const dispatch = useDispatch();
 
   //ESTADOS GLOBALES
-  const { message } = useSelector((state) => state);
-  const { loading } = useSelector((state) => state);
+  const { message, loading, user } = useSelector((state) => state);
 
   //ESTADO LOCAL CON LOS DATOS DEL USUARIO A REGISTRAR
   const [dataUser, setDataUser] = useState({
@@ -150,7 +149,9 @@ function Register() {
           allowOutsideClick: false,
           allowEscapeKey: false,
         }).then(function () {
-          history("/profile");
+          if (user[0]) {
+            history("/profile");
+          }
         });
       } else if (message[0].code === 1100 && dataUser.nombre) {
         setDataUser({
@@ -173,7 +174,14 @@ function Register() {
         });
       }
     }
-  }, [message]);
+  }, [message, user[0]]);
+
+  //DESMONTAR EL COMPONENTE
+  useEffect(() => {
+    return () => {
+      localStorage.setItem("datosUser", JSON.stringify(user[0]));
+    };
+  });
 
   return (
     <>

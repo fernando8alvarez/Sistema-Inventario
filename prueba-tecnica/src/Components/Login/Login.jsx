@@ -22,8 +22,7 @@ function Login() {
   const dispatch = useDispatch();
 
   //ESTADOS GLOBALES
-  const { user } = useSelector((state) => state);
-  const { loading } = useSelector((state) => state);
+  const { user, loading } = useSelector((state) => state);
 
   //ESTADO LOCAL CON LOS DATOS DEL USUARIO
   const [dataUser, setUser] = useState({
@@ -84,10 +83,6 @@ function Login() {
       const status = user[0].message;
 
       if (user[0].code === 1002 && dataUser.usuario) {
-        setUser({
-          usuario: "",
-          password: "",
-        });
         //MODAL 2: Usuario o constraseña incorrectos
         Swal.fire({
           title: "Error!",
@@ -96,13 +91,7 @@ function Login() {
           confirmButtonColor: "rgb(0 0 0)",
           allowOutsideClick: false,
           allowEscapeKey: false,
-        }).then(function () {
-          setUser({
-            usuario: "",
-            password: "",
-          });
-          history("/login");
-        });
+        })
       } else if (user[0].code === 1000 && dataUser.usuario) {
         setUser({
           usuario: "",
@@ -118,6 +107,7 @@ function Login() {
           allowEscapeKey: false,
         }).then(function () {
           dispatch(authentication(true));
+          localStorage.setItem("datosUser", JSON.stringify(user[0]));
           dispatch(products(user[0].token));
           history("/profile");
         });

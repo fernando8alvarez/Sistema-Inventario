@@ -5,15 +5,21 @@ import {
   AUTHENTICATION,
   PRODUCT_LIST,
   CREATE_PRODUCT,
+  CHECK_USER,
+  SAVE_USER,
+  EDIT_PRODUCT,
+  MODIFY_PRODUCT,
 } from "../Redux/actions";
 
 const initialState = {
   message: [],
   user: [],
+  UserDetail: [],
   loading: false,
   isAuthenticated: false,
   productList: [],
-  message2:[]
+  message2: [],
+  productToEdit: [],
 };
 
 export default function Reducer(state = initialState, action) {
@@ -35,6 +41,12 @@ export default function Reducer(state = initialState, action) {
         user: [action.payload],
         loading: false,
       };
+    case CHECK_USER:
+      return {
+        ...state,
+        UserDetail: [action.payload],
+        loading: false,
+      };
     case AUTHENTICATION:
       return {
         ...state,
@@ -50,6 +62,21 @@ export default function Reducer(state = initialState, action) {
       return {
         ...state,
         message2: [action.payload],
+        loading: false,
+      };
+    case SAVE_USER:
+      return {
+        ...state,
+        user: [action.payload],
+      };
+    case EDIT_PRODUCT:
+      return {
+        ...state,
+        productToEdit: [action.payload],
+      };
+    case MODIFY_PRODUCT:
+      return {
+        ...state,
         loading: false,
       };
 

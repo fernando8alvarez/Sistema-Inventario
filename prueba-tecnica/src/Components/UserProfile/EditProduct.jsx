@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createdProduct } from "../../Redux/actions";
+import { products, checkUser, modifyProduct } from "../../Redux/actions";
 import Swal from "sweetalert2";
 
 //ESTILOS TAILWIND
@@ -17,20 +18,34 @@ const estilos = {
   error: "text-red-500 text-sm mt-2 w-fit",
 };
 
-const CreateProduct = () => {
+const CreateProduct = ({
+  buttonProductList,
+  setButtonProductList,
+  buttonEditProduct,
+  setButtonEditProduct,
+}) => {
   const dispatch = useDispatch();
 
   //ESTADOS GLOBALES
-  const { user, message2 } = useSelector((state) => state);
+  const { user, message2, UserDetail, productToEdit } = useSelector(
+    (state) => state
+  );
+  const { codigo, descripcion, idCategoria, detalle, stock, precio } =
+    productToEdit[0];
 
   //ESTADO LOCAL CON LOS DATOS DEL PRODUCTO
   const [dataProduct, setDataProduct] = useState({
-    codigo: "",
-    descripcion: "",
-    categoria: [{ categoria_id: 0 }],
-    detalle_producto: [{ descripcion: "", stock: 0, precio: 0 }],
+    codigo: codigo ? codigo : "",
+    descripcion: descripcion ? descripcion : "",
+    categoria: [{ categoria_id: idCategoria ? idCategoria : 0 }],
+    detalle_producto: [
+      {
+        descripcion: detalle ? detalle : "",
+        stock: stock ? stock : 0,
+        precio: precio ? precio : 0,
+      },
+    ],
   });
-
 
   //MANEJO DE INPUTS DE LA INFORMACION DEL PRODUCTO Y ERRORES
   const handleChange = (e) => {
@@ -84,8 +99,8 @@ const CreateProduct = () => {
 
     if (!input.codigo) {
       errors.codigo = "Se requiere un codigo numerico";
-    } else if (!/^[0-9]*$/g.test(input.codigo)) {
-      errors.codigo = "Solo puede contener numero";
+    } else if (!/^[0-9a-zA-Z\s\\.\-\\_]+$/g.test(input.codigo)) {
+      errors.codigo = "Solo puede contener letras y numeros";
     }
     if (!input.categoria[0].categoria_id) {
       errors.categoria = "Se requiere un numero entero";
@@ -110,13 +125,10 @@ const CreateProduct = () => {
     const { token } = user[0];
 
     if (token && codigo && descripcion && categoria_id && stock && precio) {
-      dispatch(createdProduct(dataProduct, token));
-      setDataProduct({
-        codigo: "",
-        descripcion: "",
-        categoria: [{ categoria_id: "" }],
-        detalle_producto: [{ descripcion: "", stock: "", precio: "" }],
-      });
+      dispatch(modifyProduct(dataProduct, token));
+      dispatch(products(user[0].token));
+      setButtonEditProduct(buttonEditProduct && false);
+      setButtonProductList(!buttonProductList && true)
     } else {
       //MODAL 1: Los campos requeridos estan vacios
       Swal.fire({
@@ -130,9 +142,21 @@ const CreateProduct = () => {
     }
   };
 
+  useEffect(() => {
+    const { token } = user[0];
+    dispatch(checkUser(token));
+  }, []);
+
+  //REGRESAR A LA LISTA DE PRODUCTOS
+  const returnList = () => {
+    dispatch(products(user[0].token));
+    setButtonProductList(!buttonProductList && true);
+    setButtonEditProduct(buttonEditProduct && false);
+  };
+
   return (
     <div className="w-full h-fit flex flex-col items-center gap-10">
-      <div className="text-slate-700 text-3xl font-medium">Agregar Productos</div>
+      <div className="text-slate-700 text-3xl font-medium">Editar Producto</div>
       <form action="#" className="w-5/6">
         <div className="flex gap-10 justify-between">
           {/*---- INPUT CODIGO -----*/}
@@ -145,9 +169,9 @@ const CreateProduct = () => {
                 type="text"
                 id="codigo"
                 name="codigo"
-                onChange={(e) => handleChange(e)}
                 className={estilos.input}
                 placeholder="Ingrese el codigo del producto ..."
+                value={dataProduct.codigo}
               />
               {errors.codigo && (
                 <p className={estilos.error}>{errors.codigo}</p>
@@ -167,6 +191,7 @@ const CreateProduct = () => {
                 className={estilos.input}
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese una descripción ..."
+                value={dataProduct.descripcion}
               />
             </div>
           </div>
@@ -185,6 +210,11 @@ const CreateProduct = () => {
                 onChange={(e) => handleChange(e)}
                 className={estilos.input}
                 placeholder="Ingrese el id de la categoria ..."
+                value={
+                  dataProduct.categoria[0].categoria_id
+                    ? dataProduct.categoria[0].categoria_id
+                    : ""
+                }
               />
               {errors.categoria && (
                 <p className={estilos.error}>{errors.categoria}</p>
@@ -204,6 +234,7 @@ const CreateProduct = () => {
                 className={estilos.input}
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese una descripción ..."
+                value={dataProduct.detalle_producto[0].descripcion}
               />
             </div>
           </div>
@@ -222,6 +253,11 @@ const CreateProduct = () => {
                 onChange={(e) => handleChange(e)}
                 className={estilos.input}
                 placeholder="Ingrese la cantidad en existencia ..."
+                value={
+                  dataProduct.detalle_producto[0].stock
+                    ? dataProduct.detalle_producto[0].stock
+                    : ""
+                }
               />
               {errors.stock && <p className={estilos.error}>{errors.stock}</p>}
             </div>
@@ -239,6 +275,11 @@ const CreateProduct = () => {
                 className={estilos.input}
                 onChange={(e) => handleChange(e)}
                 placeholder="Ingrese un precio para el producto ..."
+                value={
+                  dataProduct.detalle_producto[0].precio
+                    ? dataProduct.detalle_producto[0].precio
+                    : ""
+                }
               />
               {errors.precio && (
                 <p className={estilos.error}>{errors.precio}</p>
@@ -254,7 +295,14 @@ const CreateProduct = () => {
               onClick={(e) => handleSubmit(e)}
               className={estilos.boton}
             >
-              Agregar producto
+              Actualizar producto
+            </button>
+            <button
+              type="submit"
+              onClick={() => returnList()}
+              className={estilos.boton}
+            >
+              Regresar
             </button>
           </div>
         </div>

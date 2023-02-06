@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import imgUser from "./img/defaultUser.png";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ const estilos = {
   contenedor1:
     "bg-white w-60 h-fit mt-4 py-5 px-4 rounded-r-lg shadow-black shadow-lg flex flex-col gap-5",
   botones:
-    "text-sm font-medium w-full text-gray-700 py-2 px-2 flex gap-2 items-center justify-start hover:bg-black hover:text-white hover:scale-105 rounded-md transition-all duration-300 delay-150 ease-in-out",
+    "text-sm font-medium w-full text-gray-700 py-2 px-2 flex gap-2 items-center justify-start hover:bg-[#bfff07] hover:text-slate-700 hover:scale-105 rounded-md transition-all duration-300 delay-150 ease-in-out",
 };
 
 const Menu = ({
@@ -18,6 +18,8 @@ const Menu = ({
   setProductList,
   createProducts,
   setCreateProducts,
+  EditProduct,
+  setEditProduct,
 }) => {
   //MANEJO DE HOOKS
   const history = useNavigate();
@@ -25,7 +27,7 @@ const Menu = ({
 
   //MANEJO DE ESTADOS GLOBALES
   const { user } = useSelector((state) => state);
-  const { nombre, apellido, usuario, email } = user[0].data;
+  const { nombre, apellido, usuario, email } = JSON.parse(localStorage.getItem("datosUser")).data;
 
   //AUTENTICACION DE SESION
   const singOut = () => {
@@ -36,6 +38,7 @@ const Menu = ({
       allowOutsideClick: false,
       allowEscapeKey: false,
     }).then(function () {
+      localStorage.removeItem("datosUser");
       dispatch(authentication(false));
       history("/");
     });
@@ -45,11 +48,13 @@ const Menu = ({
     setProductList(!productList && true);
     dispatch(products(user[0].token));
     setCreateProducts(false);
+    setEditProduct(EditProduct && false);
   };
 
   const buttonCreateProduct = () => {
     setCreateProducts(!createProducts && true);
     setProductList(false);
+    setEditProduct(EditProduct && false);
   };
 
   return (
