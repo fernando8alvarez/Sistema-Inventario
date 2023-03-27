@@ -67,7 +67,7 @@ const Profile = () => {
         </div>
         {buttonProductList && (
           <div className="w-full py-5 pr-10">
-            <div className="bg-white w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
+            <div className="bg-[#ECF1F6] w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
               <ProductList
                 PList={buttonProductList}
                 setProductList={setButtonProductList}
@@ -79,14 +79,14 @@ const Profile = () => {
         )}
         {buttonCreateProducts && (
           <div className="w-full py-5 pr-10">
-            <div className="bg-white w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
+            <div className="bg-[#ECF1F6] w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
               <CreateProduct />
             </div>
           </div>
         )}
         {buttonEditProduct && (
           <div className="w-full py-5 pr-10">
-            <div className="bg-white w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
+            <div className="bg-[#ECF1F6] w-full h-auto mt-4 p-10 rounded-lg shadow-black shadow-lg">
               <EditProduct
                 buttonProductList={buttonProductList}
                 setButtonProductList={setButtonProductList}

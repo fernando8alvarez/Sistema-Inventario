@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 //ESTILOS CON TAILWIND
 const estilos = {
-  contenedor1:"bg-white w-60 h-fit mt-4 py-5 px-4 rounded-r-lg shadow-black shadow-lg flex flex-col gap-5",
+  contenedor1:"bg-[#ECF1F6] w-60 h-fit mt-4 py-5 px-4 rounded-r-lg shadow-black shadow-lg flex flex-col gap-5",
   botones:"text-sm font-medium w-full text-gray-700 py-2 px-2 flex gap-2 items-center justify-start hover:bg-[#bfff07] hover:text-slate-700 hover:scale-105 rounded-md transition-all duration-300 delay-150 ease-in-out",
 };
 
@@ -96,7 +96,7 @@ const Menu = ({
         </button>
         {/*----- PESTAÑA CERRAR SESION -----*/}
         <button onClick={() => singOut()} className={estilos.botones}>
-          <span className=""> Cerrar Sesion</span>
+          <span className=""> Cerrar sesión</span>
         </button>
       </div>
     </div>
